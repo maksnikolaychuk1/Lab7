@@ -7,6 +7,12 @@
       POSTGRES_DB: studentdb
     ports:
       - "5432:5432"
+    # ДОДАЄМО ЦЕ:
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user -d studentdb"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   api:
     build:
@@ -18,11 +24,5 @@
       - ASPNETCORE_ENVIRONMENT=Production
       - ConnectionStrings__DefaultConnection=Host=db;Database=studentdb;Username=user;Password=password
     depends_on:
-      - db
-
-  k6:
-    image: grafana/k6:latest
-    volumes:
-      - ./Lab7.Api/k6-scripts:/scripts
-    depends_on:
-      - api
+      db:
+        condition: service_healthy # ТЕПЕР API ЧЕКАТИМЕ ГОТОВНОСТІ БАЗИ
