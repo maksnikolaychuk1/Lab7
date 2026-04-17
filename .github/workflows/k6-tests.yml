@@ -53,7 +53,10 @@ jobs:
 
       - name: Run k6 test
         # Припускаємо, що папка scripts лежить у корені
-        run: k6 run -e BASE_URL=http://localhost:5000 scripts/${{ steps.test-type.outputs.type }}.js --summary-export=results.json
+      run: |
+        k6 run -e BASE_URL=http://localhost:5000 \
+        Lab7.Api/k6-scripts/${{ steps.test-type.outputs.type }}.js \
+        --summary-export=results.json
 
       - name: Upload results
         if: always()
