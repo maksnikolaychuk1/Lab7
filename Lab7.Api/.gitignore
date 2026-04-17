@@ -1,0 +1,33 @@
+﻿# === Вихідні файли компіляції (.NET) ===
+[Bb]in/
+[Oo]bj/
+out/
+
+# === Файли IDE (Rider, Visual Studio, VS Code) ===
+.idea/
+.vs/
+*.user
+*.userosscache
+*.sln.docstates
+.vscode/
+
+# === Файли конфігурації та секрети ===
+# Ігноруємо локальні налаштування, щоб не затерти паролі інших розробників
+appsettings.Development.json
+secrets.json
+.env
+
+# === Бази даних (якщо використовуєш локальні файли) ===
+*.db
+*.sqlite
+*.sqlite3
+
+# === Docker ===
+.dockerignore
+# Але не ігноруй самі docker-compose.yml!
+
+# === Логи та тимчасові файли ===
+*.log
+.DS_Store
+dist/
+node_modules/
