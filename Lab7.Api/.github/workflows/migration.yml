@@ -1,0 +1,52 @@
+﻿name: Migration
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'Lab7.Api/**'
+
+jobs:
+  validate-migrations:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: StudentDb
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U postgres"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Verify Migrations in Docker
+        run: |
+          docker run --rm \
+          --network host \
+          -e ConnectionStrings__DefaultConnection="Host=127.0.0.1;Port=5432;Database=StudentDb;Username=postgres;Password=postgres" \
+          -v ${{ github.workspace }}:/src \
+          -w /src \
+          mcr.microsoft.com/dotnet/sdk:10.0 \
+          bash -c "
+            dotnet tool install --global dotnet-ef &&
+            export PATH=\"\$PATH:/root/.dotnet/tools\" &&
+            dotnet restore Lab7.sln &&
+            dotnet ef database update --project Lab7.Api --startup-project Lab7.Api &&
+            dotnet ef migrations script --idempotent --project Lab7.Api --output migrations.sql
+          "
+
+      - name: Upload SQL script
+        uses: actions/upload-artifact@v4
+        with:
+          name: migration-sql
+          path: migrations.sql

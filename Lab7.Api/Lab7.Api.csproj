@@ -18,6 +18,10 @@
       <Content Include="..\.dockerignore">
         <Link>.dockerignore</Link>
       </Content>
+      <Content Include=".github\workflows\branch-name.yml" />
+      <Content Include=".github\workflows\k6-tests.yml" />
+      <Content Include=".github\workflows\migration.yml" />
+      <Content Include=".github\workflows\pr-tests.yml" />
     </ItemGroup>
 
 </Project>

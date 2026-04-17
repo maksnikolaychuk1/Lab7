@@ -1,0 +1,21 @@
+﻿name: PR Tests
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build and Test in Docker
+        run: |
+          docker run --rm \
+          -v ${{ github.workspace }}:/src \
+          -w /src \
+          mcr.microsoft.com/dotnet/sdk:10.0 \
+          bash -c "dotnet restore Lab7.sln && dotnet build Lab7.sln --no-restore && dotnet test Lab7.sln --no-build --verbosity normal"

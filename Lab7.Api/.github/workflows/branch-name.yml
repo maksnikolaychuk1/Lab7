@@ -1,0 +1,16 @@
+﻿name: Check Branch Name
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  check-branch-name:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check Branch Name Convention
+        uses: deepakputhraya/action-branch-name@master
+        with:
+          regex: '^(feature|bugfix|hotfix|release)\/[a-z0-9._-]+$'
+          allowed_prefixes: 'feature,bugfix,hotfix,release'
+          ignore: main,develop
